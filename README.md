@@ -1,3 +1,3 @@
-# IFT6135H19_assignment
+# IFT6135H19 - Representation Learning
 
-Practical part, #1 MLP
+Practical part of first assignment (MLP and CNN)
