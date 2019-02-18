@@ -62,30 +62,24 @@ class MNIST_CNN(nn.Module):
     def __init__(self):    
         super(MNIST_CNN, self). __init__()
         #Conv2d(in_channels, out_channels, kernel_size, stride=1, padding=0, dilation=1, groups=1, bias=True)
-        self.conv1 = nn.Conv2d(1,16,5,1,2)
-        self.conv2 = nn.Conv2d(16,32,3,1,1)
-        self.conv3 = nn.Conv2d(32,64,3,1,1)
-        self.conv4 = nn.Conv2d(64,128,3,1,1)
-        self.conv5 = nn.Conv2d(128,256,3,1,1)
+        self.conv1 = nn.Conv2d(1,20,5,1)
+        self.conv2 = nn.Conv2d(20,50,4,1)
+        self.conv3 = nn.Conv2d(50,80,3,1)
         #Linear(in_features, out_features, bias=True)
-        self.fc1 = nn.Linear(256*3*3,256)
-        self.fc2 = nn.Linear(256,10)
+        self.fc1 = nn.Linear(80*3*3,800)
+        self.fc2 = nn.Linear(800,10)
     
     #define how input will be processed through those layers
     def forward(self, x):
-        x = F.relu(self.conv1(x)) # 28
-        x = F.max_pool2d(x,2,2)   # 14
-        x = F.relu(self.conv2(x)) # 14
-        x = F.max_pool2d(x,2,1)   # 13
-        x = F.relu(self.conv3(x)) # 13
-        x = F.max_pool2d(x,2,1)   # 12
-        x = F.relu(self.conv4(x)) # 12
-        x = F.max_pool2d(x,2,2)   # 6
-        x = F.relu(self.conv5(x)) # 6
-        x = F.max_pool2d(x,2,2)   # 3
+        x = F.relu(self.conv1(x))
+        #MaxPool2d(kernel_size, stride=None, padding=0, dilation=1, return_indices=False, ceil_mode=False)
+        x = F.max_pool2d(x,2,2)
+        x = F.relu(self.conv2(x))
+        x = F.relu(self.conv3(x))
+        x = F.max_pool2d(x, 2, 2)
         
         #flatten the feature map
-        x = x.view(-1, 256*3*3)
+        x = x.view(-1, 3*3*80)
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
         x = F.log_softmax(x, dim=1)
